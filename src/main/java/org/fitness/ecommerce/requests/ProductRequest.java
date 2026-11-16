@@ -20,6 +20,5 @@ public class ProductRequest {
     private BigDecimal price;
     private String categoryType;
     private int stockQuantity;
-    private String image;
     private boolean avalaible;
 }
