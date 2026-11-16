@@ -55,4 +55,36 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("delete/{productId}")
+    public ResponseEntity<GlobalResponse> delete(@PathVariable String productId){
+        GlobalResponse response = new GlobalResponse();
+        services.delete(productId);
+        response.setData(null);
+        response.setStatus(1);
+        response.setMessage("Succesfully Deleted Product");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("update/{productId}")
+    public ResponseEntity<GlobalResponse> update(@PathVariable String productId,@RequestPart(value = "product",required = false) ProductRequest request, @RequestPart(value = "image",required = false) MultipartFile image){
+        GlobalResponse response = new GlobalResponse();
+        Product prod = services.update(productId,request,image);
+        response.setData(prod);
+        response.setStatus(1);
+        response.setMessage("Succesfully Updated Product");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    public ResponseEntity<GlobalResponse> search(@RequestParam String keyword){
+        GlobalResponse response = new GlobalResponse();
+        List<Product>prods = services.search(keyword);
+        response.setData(prods);
+        response.setStatus(1);
+        response.setMessage("Succesfully Updated Product");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

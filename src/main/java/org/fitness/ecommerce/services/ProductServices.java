@@ -45,4 +45,38 @@ public class ProductServices {
         return prod;
 
     }
+
+    public void delete(String productId) {
+        Product prod = repository.findById(productId).orElseThrow(() -> new RuntimeException("Invalid Product Id"));
+        repository.delete(prod);
+    }
+
+    public Product update(String productId, ProductRequest request, MultipartFile image) {
+        if(request == null && (image == null || image.isEmpty())){
+            throw new RuntimeException("Nothing Updation for Product Given");
+        }
+
+        Product prod = repository.findById(productId).orElseThrow(() -> new RuntimeException("Invalid Product Id"));
+        if(request != null){
+             prod.setName(request.getName());
+             prod.setBrand(request.getBrand());
+             prod.setAvalaible(request.isAvalaible());
+             prod.setDescription(request.getDescription());
+             prod.setPrice(request.getPrice());
+             prod.setCategoryType(CategoryType.valueOf(request.getCategoryType().toUpperCase()));
+             prod.setStockQuantity(request.getStockQuantity());
+        }
+        if(image != null){
+            prod.setImage(service.saveImage(image));
+        }
+        repository.save(prod);
+
+        return prod;
+
+    }
+
+    public List<Product> search(String keyword) {
+        List<Product> prods = repository.searchKeyWord(keyword);
+        return prods;
+    }
 }
