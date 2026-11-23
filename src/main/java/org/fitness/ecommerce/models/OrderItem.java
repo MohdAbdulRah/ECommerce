@@ -3,14 +3,19 @@ package org.fitness.ecommerce.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -18,7 +23,6 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "product_id",nullable = false)
-    @JsonIgnore
     public Product product;
 
     @ManyToOne
@@ -28,7 +32,7 @@ public class OrderItem {
 
     public int quantity;
 
-    public int price;
+    public BigDecimal price;
 
     public LocalDateTime createdAt;
 

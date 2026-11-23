@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,12 +24,12 @@ public class Order {
     public String Id;
     public String name;
 
-    @Column(unique = true)
+
     public String email;
 
+    @Builder.Default
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    @JsonIgnore
-    public List<OrderItem> itemsList;
+    public List<OrderItem> itemsList = new ArrayList<>();
 
     public LocalDateTime createdAt;
 
