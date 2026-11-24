@@ -31,6 +31,7 @@ public class OrderService {
 
         for(OrderItemRequest oq : request.itemsList){
             Product pro = productRepository.findById(oq.getProductId()).orElseThrow(() -> new RuntimeException("Product Not Found"));
+            if(pro.getStockQuantity() < oq.getQuantity()) throw new RuntimeException("Less Number of Avalaible Stocks");
             OrderItem item = OrderItem.builder()
                     .quantity(oq.getQuantity())
                     .price(pro.getPrice().multiply(BigDecimal.valueOf(oq.getQuantity())))
@@ -38,10 +39,13 @@ public class OrderService {
                     .order(order)
                     .build();
             order.itemsList.add(item);
+            pro.setStockQuantity(pro.getStockQuantity() - oq.getQuantity());
+            productRepository.save(pro);
 
         }
 
         orderRepository.save(order);
+
         return order;
     }
 
